@@ -11,9 +11,9 @@ In-game reset using player one controller:
 Source code can be used by Arduino IDE or can be compiled using avr-toolchain.
 
 ### Configuration
-Program behavior can be configured by defines that can be found in main.c file:
-- `LONG_RESET_ENABLED` - long reset feature is enabled
-- `USE_INTERRUPTS` - use interrupts for read controller data, instead of pure polling
+Program behavior can be configured by defines that can be found in `main.c` file:
+- `LONG_RESET_ENABLED` - Long reset feature is enabled
+- `USE_INTERRUPTS` - Use interrupts for read controller data, instead of pure polling
 
 ### Installation
 Here is a simplest connection pinout Arduino board to PlayStation board (without illustration):
