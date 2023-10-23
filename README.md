@@ -1,5 +1,5 @@
 ## PlayStation Reset Mod
-In-Game Reset mod for PlayStation 1 (or One aka Slim).
+In-Game Reset mod for PlayStation 1 and PSone (aka Slim, `yes, Slim model has reset point`).
 Based on Arduino compatible boards. Arduino Pro Mini (ATmega328 or ATmega168) is recommended.
 
 ### Features
@@ -25,7 +25,7 @@ Here is a simplest connection pinout Arduino board to PlayStation board (without
 | (PD3) D3  | <- | Pad Port Pin 6 (ATT/SS) |
 | (PD4) D4  | <- | Pad Port Pin 2 (CMD) |
 | (PD5) D5  | <- | Pad Port Pin 1 (DAT) |
-| (PD6) D6  | -> | RESET |
+| (PD6) D6  | -> | RESET Pin in PSU connector or RESET point for PSone |
 | (PD7) D7  | -- | `X` |
 | (PB0) D8  | -- | `X` |
 | (PB1) D9  | -- | `X` |
