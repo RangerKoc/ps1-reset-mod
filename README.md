@@ -4,8 +4,8 @@ Based on Arduino compatible boards. Arduino Pro Mini (ATmega328 or ATmega168) is
 
 ### Features
 In-game reset using player one controller:
- - <kbd>SELECT + START + L2 + R2</kbd> - Reset
- - <kbd>SELECT + CROSS + L2 + R2</kbd> - Long Reset (useful for X-Station only)
+* <kbd>SELECT + START + L2 + R2</kbd> - Reset
+* <kbd>SELECT + CROSS + L2 + R2</kbd> - Long Reset (useful for X-Station only)
 
 ### Building and flashing
 Arduino Nano: connect to PC using USB cable.
@@ -17,15 +17,19 @@ Open `ps1-reset-mod.ino` in Arduino IDE, select the appropriate Arduino Board ty
 Using `avr-toolchain`:<br>
 Run `make` command in terminal, or run `build_atmega328.cmd` or `build_atmega168.cmd` command batch file.<br>
 Then flash the hex file to Arduino Board using `avrdude` tool:<br>
-`avrdude -p atmega328 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i`<br>
+```
+avrdude -p atmega328 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i
+```
 or<br>
-`avrdude -p atmega168 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i`<br>
+```
+avrdude -p atmega168 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i
+```
 
 COM port number may be different on your system.<br>
-Also COM port baudrate may vary depending of Arduino Board you using.<br>
-ATmega328/ATmega168 optiboot bootloader: 115200<br>
-ATmega328 old bootloader: 57600<br>
-ATmega168 old bootloader: 19200<br>
+Also COM port baudrate may vary depending of Arduino Board you using.
+* ATmega328/ATmega168 optiboot bootloader: 115200
+* ATmega328 old bootloader: 57600
+* ATmega168 old bootloader: 19200
 
 ### Configuration
 Program behavior can be configured by defines that can be found in `main.c` file:
@@ -36,7 +40,7 @@ Program behavior can be configured by defines that can be found in `main.c` file
 Here is a simplest connection pinout Arduino board to PlayStation board:
 | Arduino   |    | PlayStation board  |
 |-----------|----|------------------|
-|       5V  | <- | Pad Port Pin 5 (3.5V) or another +3.5V source point (VCC) |
+|   5V/Vcc  | <- | Pad Port Pin 5 (3.5V) or another +3.5V source point (VCC) |
 |       GND | <- | GND |
 | (PD2) D2  | <- | Pad Port Pin 7 (CLK) |
 | (PD3) D3  | <- | Pad Port Pin 6 (ATT/SS) |
