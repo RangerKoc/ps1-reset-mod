@@ -12,7 +12,7 @@ Arduino Nano: connect to PC using USB cable.
 Arduino Pro Mini: use USB-UART module (e.g. CP2102 board with microUSB or Type-C), connect pins GND-GND, VCC-VCC, DTR-DTR, Tx-Rx, Rx-Tx, then connect module to PC using USB cable.
 
 Using `Arduino IDE`:<br>
-Open `ps1-reset-mod.ino` in Arduino IDE, select the appropriate Arduino Board type, then click `Upload` button.
+Open `ps1-reset-mod.ino` in Arduino IDE, select the appropriate Arduino Board type, select the appropriate COM port, then click `Upload` button.
 
 Using `avr-toolchain`:<br>
 Run `make` command in terminal, or run `build_atmega328.cmd` or `build_atmega168.cmd` command batch file.<br>
