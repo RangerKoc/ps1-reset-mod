@@ -15,7 +15,7 @@ Using `Arduino IDE`:<br>
 Open `ps1-reset-mod.ino` in Arduino IDE, select the appropriate Arduino Board type, then click `Upload` button.
 
 Using `avr-toolchain`:<br>
-Run `make` command in terminal, or run `build_atmega328.cmd` or `build_atmega168.cmd` command batch file.
+Run `make` command in terminal, or run `build_atmega328.cmd` or `build_atmega168.cmd` command batch file.<br>
 Then flash the hex file to Arduino Board using `avrdude` tool:<br>
 `avrdude -p atmega328 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i`<br>
 or<br>
@@ -56,7 +56,7 @@ Here is a simplest connection pinout Arduino board to PlayStation board:
 | (PC4) A4  | -- | `X` |
 | (PC5) A5  | -- | `X` |
 
-<p align="center"><img src="/guide/arduino-pins.png" width="600"/></p>
+<p align="center"><img src="/guide/arduino-pins.png"/></p>
 
 More pinouts can be found inside `guide` directory.
 
