@@ -11,21 +11,21 @@ In-game reset using player one controller:
 Arduino Nano: connect to PC using USB cable.
 Arduino Pro Mini: use USB-UART module (e.g. CP2102 board with microUSB or Type-C), connect pins GND-GND, VCC-VCC, DTR-DTR, Tx-Rx, Rx-Tx, then connect module to PC using USB cable.
 
-Using `Arduino IDE`:
+Using `Arduino IDE`:<br>
 Open `ps1-reset-mod.ino` in Arduino IDE, select the appropriate Arduino Board type, then click `Upload` button.
 
-Using `avr-toolchain`:
+Using `avr-toolchain`:<br>
 Run `make` command in terminal, or run `build_atmega328.cmd` or `build_atmega168.cmd` command batch file.
-Then flash the hex file to Arduino Board using `avrdude` tool:
-`avrdude -p atmega328 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i`
-or
-`avrdude -p atmega168 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i`
+Then flash the hex file to Arduino Board using `avrdude` tool:<br>
+`avrdude -p atmega328 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i`<br>
+or<br>
+`avrdude -p atmega168 -c arduino -P COM3 -b 115200 -D -U flash:w:ps1-reset-mod.hex:i`<br>
 
-COM port number may be different on your system
-Also COM port baudrate may vary depending of Arduino Board you using.
-ATmega328/ATmega168 optiboot bootloader: 115200
-ATmega328 old bootloader: 57600
-ATmega168 old bootloader: 19200
+COM port number may be different on your system.<br>
+Also COM port baudrate may vary depending of Arduino Board you using.<br>
+ATmega328/ATmega168 optiboot bootloader: 115200<br>
+ATmega328 old bootloader: 57600<br>
+ATmega168 old bootloader: 19200<br>
 
 ### Configuration
 Program behavior can be configured by defines that can be found in `main.c` file:
