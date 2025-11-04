@@ -4,8 +4,8 @@ Based on Arduino compatible boards. Arduino Pro Mini (ATmega328 or ATmega168) is
 
 ### Features
 In-game reset using player one controller:
-* <kbd>SELECT + START + L2 + R2</kbd> - Reset
-* <kbd>SELECT + CROSS + L2 + R2</kbd> - Long Reset (useful for X-Station only)
+* <kbd>SELECT + START + L1 + R1</kbd> or <kbd>SELECT + START + L2 + R2</kbd> - Reset
+* <kbd>SELECT + CROSS + L1 + R1</kbd> or <kbd>SELECT + CROSS + L2 + R2</kbd> - Long Reset (useful for X-Station only)
 
 ### Building and flashing
 Arduino Nano: connect to PC using USB cable.

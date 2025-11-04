@@ -25,8 +25,10 @@
  */
 // ----------------------------------------------------------------------------
 /*
+ * SELECT + START + L1 + R1,
  * SELECT + START + L2 + R2 : Reset
- * SELECR + CROSS + L2 + R2 : Long Reset
+ * SELECT + CROSS + L1 + R1,
+ * SELECT + CROSS + L2 + R2 : Long Reset
  */
 // ----------------------------------------------------------------------------
 #include <avr/interrupt.h>
@@ -67,6 +69,24 @@
 #define max_cmd_nbit  (max_cmd_bytes * 8)
 #define max_dat_bytes 5
 #define max_dat_nbit  (max_dat_bytes * 8)
+// ----------------------------------------------------------------------------
+// PlayStation controller buttons masks
+#define BTN0_SELECT   (1 << 0)
+#define BTN0_L3       (1 << 1)
+#define BTN0_R3       (1 << 2)
+#define BTN0_START    (1 << 3)
+#define BTN0_UP       (1 << 4)
+#define BTN0_RIGHT    (1 << 5)
+#define BTN0_DOWN     (1 << 6)
+#define BTN0_LEFT     (1 << 7)
+#define BTN1_L2       (1 << 0)
+#define BTN1_R2       (1 << 1)
+#define BTN1_L1       (1 << 2)
+#define BTN1_R1       (1 << 3)
+#define BTN1_TRIANGLE (1 << 4)
+#define BTN1_CIRCLE   (1 << 5)
+#define BTN1_CROSS    (1 << 6)
+#define BTN1_SQUARE   (1 << 7)
 // ----------------------------------------------------------------------------
 union cmd_t
 {
@@ -255,8 +275,12 @@ int main(void)
         // bt0 bits: LEFT, DOWN, RIGHT, UP, START, R3, L3, SELECT
         // bt1 bits: SQUARE, CROSS, CIRCLE, TRIANGLE, R1, L1, R2, L2
 
-        /* SELECT + START + L2 + R2 */
-        if (dat.btn0 == 0b11110110 && dat.btn1 == 0b11111100)
+        dat.btn0 = ~dat.btn0;
+        dat.btn1 = ~dat.btn1;
+
+        if ( (dat.btn0 == (BTN0_SELECT | BTN0_START)) &&
+            ((dat.btn1 == (BTN1_L2 | BTN1_R2)) ||
+             (dat.btn1 == (BTN1_L1 | BTN1_R1))) )
         {
           if (++cnt_short == 5)
           {
@@ -269,8 +293,9 @@ int main(void)
 #if defined(LONG_RESET_ENABLED)
           cnt_long = 0;
         }
-        /* SELECT + CROSS + L2 + R2 */
-        else if (dat.btn0 == 0b11111110 && dat.btn1 == 0b10111100)
+        else if ( (dat.btn0 == BTN0_SELECT) &&
+                 ((dat.btn1 == (BTN1_CROSS | BTN1_L2 | BTN1_R2)) ||
+                  (dat.btn1 == (BTN1_CROSS | BTN1_L1 | BTN1_R1))) )
         {
           cnt_short = 0;
           if (++cnt_long == 10)
