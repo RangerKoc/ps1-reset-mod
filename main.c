@@ -217,8 +217,6 @@ int main(void)
       continue;
     // ----------------------------------------------------
 #if defined(USE_INTERRUPTS)
-    /* disable interrupts */
-    //cli();
     /* disable interrupt for ATT/SS */
     cbi(EIMSK, INT1);
     /* disable interrupt for CLK */
@@ -233,21 +231,6 @@ int main(void)
       if (bits[i] & DAT_MASK)
         dat.buf[i >> 3] |= _BV(i % 8);
 
-/*
-    Serial.print("CMD:");
-    for (uint8_t i = 0; i < 2; i++)
-    {
-      Serial.print(" ");
-      Serial.print(cmd.buf[i], HEX);
-    }
-    Serial.print("   DAT:");
-    for (uint8_t i = 0; i < 5; i++)
-    {
-      Serial.print(" ");
-      Serial.print(dat.buf[i], HEX);
-    }
-    Serial.println("");
-*/
     // ----------------------------------------------------
     if (dat.sid == 0x5A)
     {
@@ -257,8 +240,8 @@ int main(void)
       // 0x7x - Analogue
       if ( (dat.pid == 0x41) || (dat.pid == 0x73) || (dat.pid == 0x53) )
       {
-        // bt0 bits: LEFT, DOWN, RIGHT, UP, START, R3, L3, SELECT
-        // bt1 bits: SQUARE, CROSS, CIRCLE, TRIANGLE, R1, L1, R2, L2
+        // btn0 bits: LEFT, DOWN, RIGHT, UP, START, R3, L3, SELECT
+        // btn1 bits: SQUARE, CROSS, CIRCLE, TRIANGLE, R1, L1, R2, L2
 
         dat.btn0 = ~dat.btn0;
         dat.btn1 = ~dat.btn1;
@@ -277,12 +260,13 @@ int main(void)
           }
 #if defined(LONG_RESET_ENABLED)
           cnt_long = 0;
+#endif
         }
+#if defined(LONG_RESET_ENABLED)
         else if ( (dat.btn0 == BTN0_SELECT) &&
                  ((dat.btn1 == (BTN1_CROSS | BTN1_L2 | BTN1_R2)) ||
                   (dat.btn1 == (BTN1_CROSS | BTN1_L1 | BTN1_R1))) )
         {
-          cnt_short = 0;
           if (++cnt_long == 10)
           {
             LED_ON;
@@ -291,14 +275,15 @@ int main(void)
             LED_OFF;
             cnt_long = 0;
           }
-#endif /* LONG_RESET_ENABLED */
+          cnt_short = 0;
         }
+#endif /* LONG_RESET_ENABLED */
         else
         {
           cnt_short = 0;
 #if defined(LONG_RESET_ENABLED)
           cnt_long = 0;
-#endif /* LONG_RESET_ENABLED */
+#endif
         }
       }
     }
@@ -308,8 +293,6 @@ int main(void)
 #if defined(USE_INTERRUPTS)
     /* enable interrupt for ATT/SS */
     sbi(EIMSK, INT1);
-    /* enable interrupts */
-    //sei();
 #endif
     // ----------------------------------------------------
   }
