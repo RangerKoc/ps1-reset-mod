@@ -285,10 +285,11 @@ int main(void)
           cnt_long = 0;
 #endif
         }
+
+        /* sleep for a while */
+        delay_ms(50);
       }
     }
-    /* sleep for a while */
-    delay_ms(50);
     // ----------------------------------------------------
 #if defined(USE_INTERRUPTS)
     /* enable interrupt for ATT/SS */
