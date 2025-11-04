@@ -109,22 +109,18 @@ void perform_short_reset(void)
 {
   sbi(DDRD, DDD6);
   cbi(PORTD, DDD6);
-  LED_ON;
   delay_ms(100);
   sbi(PORTD, DDD6);
   cbi(DDRD, DDD6);
-  LED_OFF;
 }
 // ----------------------------------------------------------------------------
 void perform_long_reset(void)
 {
   sbi(DDRD, DDD6);
   cbi(PORTD, DDD6);
-  LED_ON;
   delay_s(2);
   sbi(PORTD, DDD6);
   cbi(DDRD, DDD6);
-  LED_OFF;
 }
 // ----------------------------------------------------------------------------
 
@@ -160,12 +156,10 @@ int main(void)
 
   sbi(PORTD, DDD6);
 
-  delay_s(REBOOT_DELAY);
-
   LED_INIT;
-  //LED_ON;
-  //delay_ms(100);
-  //LED_OFF;
+  LED_ON;
+  delay_s(REBOOT_DELAY);
+  LED_OFF;
 
   nbits = 0;
 
@@ -266,8 +260,10 @@ int main(void)
         {
           if (++cnt_short == 5)
           {
+            LED_ON;
             perform_short_reset();
             delay_s(REBOOT_DELAY);
+            LED_OFF;
             cnt_short = 0;
           }
 #if defined(LONG_RESET_ENABLED)
@@ -279,8 +275,10 @@ int main(void)
           cnt_short = 0;
           if (++cnt_long == 10)
           {
+            LED_ON;
             perform_long_reset();
             delay_s(REBOOT_DELAY);
+            LED_OFF;
             cnt_long = 0;
           }
 #endif /* LONG_RESET_ENABLED */
