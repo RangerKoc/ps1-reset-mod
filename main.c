@@ -108,8 +108,10 @@ void delay_s(uint8_t s)
 void perform_short_reset(void)
 {
   sbi(DDRD, DDD6);
+  cbi(PORTD, DDD6);
   LED_ON;
   delay_ms(100);
+  sbi(PORTD, DDD6);
   cbi(DDRD, DDD6);
   LED_OFF;
 }
@@ -117,8 +119,10 @@ void perform_short_reset(void)
 void perform_long_reset(void)
 {
   sbi(DDRD, DDD6);
+  cbi(PORTD, DDD6);
   LED_ON;
   delay_s(2);
+  sbi(PORTD, DDD6);
   cbi(DDRD, DDD6);
   LED_OFF;
 }
@@ -154,12 +158,16 @@ int main(void)
   PORTD = 0;
   DDRD  = 0;
 
+  sbi(PORTD, DDD6);
+
   delay_s(REBOOT_DELAY);
 
   LED_INIT;
   //LED_ON;
   //delay_ms(100);
   //LED_OFF;
+
+  nbits = 0;
 
 #if defined(USE_INTERRUPTS)
   /* interrupts: rising edge for CLK, falling edge for ATT/SS */
@@ -219,6 +227,8 @@ int main(void)
     // ----------------------------------------------------
     memset(cmd.buf, 0, max_cmd_bytes);
     memset(dat.buf, 0, max_dat_bytes);
+
+    nbits = 0;
 
     for (uint8_t i = 0; i < max_cmd_nbit; i++)
       if (bits[i] & CMD_MASK)
