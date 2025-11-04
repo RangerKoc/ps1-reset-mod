@@ -10,7 +10,7 @@
  * (PD4) D4  <- Pad Port Pin 1 (DAT)
  * (PD5) D5  -- x
  * (PD6) D6  -> RESET
- * (PD7) D7  -- x
+ * (PD7) D7  -> Disc Switch
  * (PB0) D8  -- x
  * (PB1) D9  -- x
  * (PB2) D10 -- x
@@ -29,6 +29,8 @@
  * SELECT + START + L2 + R2 : Reset
  * SELECT + CROSS + L1 + R1,
  * SELECT + CROSS + L2 + R2 : Long Reset
+ * SELECT + CIRCLE + L1 + R1,
+ * SELECT + CIRCLE + L2 + R2 : Disc Switch
  */
 // ----------------------------------------------------------------------------
 #include <avr/interrupt.h>
@@ -41,6 +43,8 @@
 //#define DEBUG
 
 //#define LONG_RESET_ENABLED /* long reset function is enabled (for X-Station) */
+
+//#define DISC_SWITCH_ENABLED /* disc switch function is enabled (for X-Station) */
 
 #define USE_INTERRUPTS /* use interrupts instead of polling */
 
@@ -130,6 +134,15 @@ void perform_long_reset(void)
   cbi(DDRD, DDD6);
 }
 // ----------------------------------------------------------------------------
+void perform_disc_switch(void)
+{
+  sbi(DDRD, DDD7);
+  cbi(PORTD, DDD7);
+  delay_s(5);
+  sbi(PORTD, DDD7);
+  cbi(DDRD, DDD7);
+}
+// ----------------------------------------------------------------------------
 
 
 // ----------------------------------------------------------------------------
@@ -162,6 +175,9 @@ int main(void)
   DDRD  = 0;
 
   sbi(PORTD, DDD6);
+#if defined(DISC_SWITCH_ENABLED)
+  sbi(PORTD, DDD7);
+#endif
 
   LED_INIT;
   LED_ON;
@@ -184,6 +200,9 @@ int main(void)
   uint8_t cnt_short = 0;
 #if defined(LONG_RESET_ENABLED)
   uint8_t cnt_long  = 0;
+#endif
+#if defined(DISC_SWITCH_ENABLED)
+  uint8_t cnt_disc  = 0;
 #endif
 
   union dat_t dat;
@@ -261,6 +280,9 @@ int main(void)
 #if defined(LONG_RESET_ENABLED)
           cnt_long = 0;
 #endif
+#if defined(DISC_SWITCH_ENABLED)
+          cnt_disc = 0;
+#endif
         }
 #if defined(LONG_RESET_ENABLED)
         else if ( (dat.btn0 == BTN0_SELECT) &&
@@ -276,13 +298,38 @@ int main(void)
             cnt_long = 0;
           }
           cnt_short = 0;
+#if defined(DISC_SWITCH_ENABLED)
+          cnt_disc = 0;
+#endif
         }
 #endif /* LONG_RESET_ENABLED */
+#if defined(DISC_SWITCH_ENABLED)
+        else if ( (dat.btn0 == BTN0_SELECT) &&
+                 ((dat.btn1 == (BTN1_CIRCLE | BTN1_L2 | BTN1_R2)) ||
+                  (dat.btn1 == (BTN1_CIRCLE | BTN1_L1 | BTN1_R1))) )
+        {
+          if (++cnt_disc == 5)
+          {
+            LED_ON;
+            perform_disc_switch();
+            delay_s(REBOOT_DELAY);
+            LED_OFF;
+            cnt_disc = 0;
+          }
+          cnt_short = 0;
+#if defined(LONG_RESET_ENABLED)
+          cnt_long = 0;
+#endif
+        }
+#endif /* DISC_SWITCH_ENABLED */
         else
         {
           cnt_short = 0;
 #if defined(LONG_RESET_ENABLED)
           cnt_long = 0;
+#endif
+#if defined(DISC_SWITCH_ENABLED)
+          cnt_disc = 0;
 #endif
         }
 
