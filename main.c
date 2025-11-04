@@ -7,8 +7,8 @@
  *       GND <- GND
  * (PD2) D2  <- Pad Port Pin 7 (CLK)
  * (PD3) D3  <- Pad Port Pin 6 (ATT/SS)
- * (PD4) D4  <- Pad Port Pin 2 (CMD)
- * (PD5) D5  <- Pad Port Pin 1 (DAT)
+ * (PD4) D4  <- Pad Port Pin 1 (DAT)
+ * (PD5) D5  -- x
  * (PD6) D6  -> RESET
  * (PD7) D7  -- x
  * (PB0) D8  -- x
@@ -62,11 +62,8 @@
 // ----------------------------------------------------------------------------
 #define CLK (PIND & _BV(DDD2))
 #define ATT (PIND & _BV(DDD3))
-#define CMD_MASK _BV(DDD4)
-#define DAT_MASK _BV(DDD5)
+#define DAT_MASK _BV(DDD4)
 // ----------------------------------------------------------------------------
-#define max_cmd_bytes 2
-#define max_cmd_nbit  (max_cmd_bytes * 8)
 #define max_dat_bytes 5
 #define max_dat_nbit  (max_dat_bytes * 8)
 // ----------------------------------------------------------------------------
@@ -88,24 +85,14 @@
 #define BTN1_CROSS    (1 << 6)
 #define BTN1_SQUARE   (1 << 7)
 // ----------------------------------------------------------------------------
-union cmd_t
-{
-  uint8_t buf[max_cmd_bytes];
-  struct
-  {
-    uint8_t dev;
-    uint8_t cmd;
-  };
-};
-// ----------------------------------------------------------------------------
 union dat_t
 {
   uint8_t buf[max_dat_bytes];
   struct
   {
     uint8_t ff;
-    uint8_t id0;
-    uint8_t id1;
+    uint8_t pid; // Peripheral ID (0x4x - Digital, 0x5x - Dual Analog, 0x6x - GunCon, 0x7x - Analogue)
+    uint8_t sid; // Source ID (for controller = 0x5A)
     uint8_t btn0;
     uint8_t btn1;
   };
@@ -199,7 +186,6 @@ int main(void)
   uint8_t cnt_long  = 0;
 #endif
 
-  union cmd_t cmd;
   union dat_t dat;
 
   while (1)
@@ -239,14 +225,9 @@ int main(void)
     cbi(EIMSK, INT0);
 #endif
     // ----------------------------------------------------
-    memset(cmd.buf, 0, max_cmd_bytes);
     memset(dat.buf, 0, max_dat_bytes);
 
     nbits = 0;
-
-    for (uint8_t i = 0; i < max_cmd_nbit; i++)
-      if (bits[i] & CMD_MASK)
-        cmd.buf[i >> 3] |= _BV(i % 8);
 
     for (uint8_t i = 0; i < max_dat_nbit; i++)
       if (bits[i] & DAT_MASK)
@@ -268,9 +249,13 @@ int main(void)
     Serial.println("");
 */
     // ----------------------------------------------------
-    if (cmd.dev == 0x01 && cmd.cmd == 0x42)
+    if (dat.sid == 0x5A)
     {
-      if (dat.id1 == 0x5A && (dat.id0 == 0x41 || dat.id0 == 0x73 || dat.id0 == 53))
+      // 0x4x - Digital
+      // 0x5x - Dual Analog
+      // 0x6x - GunCon
+      // 0x7x - Analogue
+      if ( (dat.pid == 0x41) || (dat.pid == 0x73) || (dat.pid == 0x53) )
       {
         // bt0 bits: LEFT, DOWN, RIGHT, UP, START, R3, L3, SELECT
         // bt1 bits: SQUARE, CROSS, CIRCLE, TRIANGLE, R1, L1, R2, L2

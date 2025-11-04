@@ -44,8 +44,8 @@ Here is a simplest connection pinout Arduino board to PlayStation board:
 |       GND | <- | GND |
 | (PD2) D2  | <- | Pad Port Pin 7 (CLK) |
 | (PD3) D3  | <- | Pad Port Pin 6 (ATT/SS) |
-| (PD4) D4  | <- | Pad Port Pin 2 (CMD) |
-| (PD5) D5  | <- | Pad Port Pin 1 (DAT) |
+| (PD4) D4  | <- | Pad Port Pin 1 (DAT) |
+| (PD5) D5  | -- | `X` |
 | (PD6) D6  | -> | RESET Pin in PSU connector or RESET point for PSone |
 | (PD7) D7  | -- | `X` |
 | (PB0) D8  | -- | `X` |
