@@ -2,6 +2,8 @@
 In-Game Reset mod for PlayStation 1 and PSone (aka Slim, `yes, Slim model has reset point`).
 Based on Arduino compatible boards. Arduino Pro Mini (ATmega328 or ATmega168) is recommended.
 
+However, this project is obsolete, recommend using the [ps1-igr-mfo](https://github.com/RangerKoc/ps1-igr-mfo) mod, based on RP2040 (Pico, Zero, Tiny).
+
 ### Features
 In-game reset using player one controller:
 * <kbd>SELECT + START + L1 + R1</kbd> or <kbd>SELECT + START + L2 + R2</kbd> - Reset
